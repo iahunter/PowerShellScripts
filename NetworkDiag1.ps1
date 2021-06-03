@@ -36,14 +36,17 @@ while(1){
 
     # DNS Checks
     ForEach ($nslookup in $nslookups) {
+        # Use Default DNS Server
         Write-Output "nslookup $nslookup"
         $result = nslookup $nslookup
         $result |Tee-Object -FilePath .\ProblemLog.txt -Append
 
+        # Use Static External DNS Server
         Write-Output "nslookup $nslookup 1.1.1.1"
         $result = nslookup $nslookup 1.1.1.1
         $result |Tee-Object -FilePath .\ProblemLog.txt -Append
 
+        # Use Static External DNS Server
         Write-Output "nslookup $nslookup 8.8.8.8"
         $result = nslookup $nslookup 8.8.8.8
         $result |Tee-Object -FilePath .\ProblemLog.txt -Append
