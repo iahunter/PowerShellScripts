@@ -1,9 +1,15 @@
 # Script to run on User machine during intermitten issues. Will Do Network Diagnostic commands and output them into a file Named ProblemLog.txt in the directory where you run the script
 # Run in Powershell CLI by executing .\NetworkDiag1.ps1
 
+Write-Output "###################################"
+Write-Output "  Starting Network Diagnostic Log  "
+Write-Output "###################################"
+
 while(1){
 
     $date = Get-Date 
+
+    Write-Output $date
 
     # Record Date and Time
     Write-Output $date | Out-File -FilePath .\ProblemLog.txt -Append
