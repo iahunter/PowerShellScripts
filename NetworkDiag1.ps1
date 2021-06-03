@@ -34,13 +34,19 @@ while(1){
     # Wifi Diagnostics
     netsh wlan show interface | Out-File -FilePath .\ProblemLog.txt -Append
 
-
     # DNS Checks
     ForEach ($nslookup in $nslookups) {
         Write-Output "nslookup $nslookup"
         $result = nslookup $nslookup
         $result |Tee-Object -FilePath .\ProblemLog.txt -Append
 
+        Write-Output "nslookup $nslookup 1.1.1.1"
+        $result = nslookup $nslookup 1.1.1.1
+        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+
+        Write-Output "nslookup $nslookup 8.8.8.8"
+        $result = nslookup $nslookup 8.8.8.8
+        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
     }
 
     # IPv4 Internet Reachablity Checks
