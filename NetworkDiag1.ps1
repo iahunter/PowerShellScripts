@@ -5,6 +5,19 @@ Write-Output "###################################"
 Write-Output "  Starting Network Diagnostic Log  "
 Write-Output "###################################"
 
+$nslookups = @(
+                "sip.pstnhub.microsoft.com.com",
+                "google.com",
+                "facebook.com",
+                "apple.com"
+              )
+
+
+$pings = @("google.com",
+            "4.2.2.2",
+            "8.8.8.8")
+
+
 while(1){
 
     $date = Get-Date 
@@ -14,28 +27,33 @@ while(1){
     # Record Date and Time
     Write-Output $date | Out-File -FilePath .\ProblemLog.txt -Append
 
+    
     # IP Configuration
     ipconfig /all | Out-File -FilePath .\ProblemLog.txt -Append
 
     # Wifi Diagnostics
     netsh wlan show interface | Out-File -FilePath .\ProblemLog.txt -Append
 
+
     # DNS Checks
-    nslookup sip.pstnhub.microsoft.com.com | Out-File -FilePath .\ProblemLog.txt -Append
-    nslookup google.com | Out-File -FilePath .\ProblemLog.txt -Append
-    nslookup facebook.com | Out-File -FilePath .\ProblemLog.txt -Append
-    nslookup apple.com | Out-File -FilePath .\ProblemLog.txt -Append
+    ForEach ($nslookup in $nslookups) {
+        Write-Output "nslookup $nslookup"
+        $result = nslookup $nslookup
+        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+
+    }
 
     # IPv4 Internet Reachablity Checks
-    ping 4.2.2.2 | Out-File -FilePath .\ProblemLog.txt -Append
-    ping 8.8.8.8 | Out-File -FilePath .\ProblemLog.txt -Append
-    ping google.com | Out-File -FilePath .\ProblemLog.txt -Append
+    ForEach ($ping in $pings) {
+        Write-Output "ping $ping"
+        $result = ping $ping
+        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
 
-    # Tracroute 
-    tracert 4.2.2.2 | Out-File -FilePath .\ProblemLog.txt -Append
-    tracert 8.8.8.8 | Out-File -FilePath .\ProblemLog.txt -Append
-    tracert google.com | Out-File -FilePath .\ProblemLog.txt -Append
-    
-    # Sleep
+        Write-Output "tracert $ping"
+        $result = tracert $ping
+        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+
+    }
+
     Start-Sleep -s 5
 }
