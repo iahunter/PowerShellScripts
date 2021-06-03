@@ -22,16 +22,13 @@ while(1){
 
     $date = Get-Date 
 
-    Write-Output $date
-
     # Record Date and Time
-    Write-Output $date | Out-File -FilePath .\ProblemLog.txt -Append
-
+    Write-Output $date | Tee-Object -FilePath .\ProblemLog.txt -Append
     
-    # IP Configuration
+    # Get IP Configuration
     ipconfig /all | Out-File -FilePath .\ProblemLog.txt -Append
 
-    # Wifi Diagnostics
+    # Get Current Wifi Diagnostics
     netsh wlan show interface | Out-File -FilePath .\ProblemLog.txt -Append
 
     # DNS Checks
