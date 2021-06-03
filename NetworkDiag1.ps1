@@ -25,39 +25,39 @@ while(1){
     # Record Date and Time
     Write-Output $date | Tee-Object -FilePath .\ProblemLog.txt -Append
     
-    # Get IP Configuration
-    ipconfig /all | Out-File -FilePath .\ProblemLog.txt -Append
+    # IP Configuration
+    ipconfig /all | Tee-Object -FilePath .\ProblemLog.txt -Append
 
-    # Get Current Wifi Diagnostics
-    netsh wlan show interface | Out-File -FilePath .\ProblemLog.txt -Append
+    # Wifi Diagnostics
+    netsh wlan show interface | Tee-Object -FilePath .\ProblemLog.txt -Append
 
     # DNS Checks
     ForEach ($nslookup in $nslookups) {
         # Use Default DNS Server
         Write-Output "nslookup $nslookup"
         $result = nslookup $nslookup
-        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+        $result | Tee-Object -FilePath .\ProblemLog.txt -Append
 
         # Use Static External DNS Server
         Write-Output "nslookup $nslookup 1.1.1.1"
         $result = nslookup $nslookup 1.1.1.1
-        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+        $result | Tee-Object -FilePath .\ProblemLog.txt -Append
 
         # Use Static External DNS Server
         Write-Output "nslookup $nslookup 8.8.8.8"
         $result = nslookup $nslookup 8.8.8.8
-        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+        $result | Tee-Object -FilePath .\ProblemLog.txt -Append
     }
 
     # IPv4 Internet Reachablity Checks
     ForEach ($ping in $pings) {
         Write-Output "ping $ping"
         $result = ping $ping
-        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+        $result | Tee-Object -FilePath .\ProblemLog.txt -Append
 
         Write-Output "tracert $ping"
         $result = tracert $ping
-        $result |Tee-Object -FilePath .\ProblemLog.txt -Append
+        $result | Tee-Object -FilePath .\ProblemLog.txt -Append
 
     }
 
