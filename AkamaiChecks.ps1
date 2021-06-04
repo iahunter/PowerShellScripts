@@ -15,14 +15,13 @@ if($exists)
     Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
     Write-Output "     Collecting ETP Log Summary    " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
     Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
-    
-    # Attempt to parse the Log file and look for server changes and DNS error messages
+
     $regex = 'attempting to send data to'
     $errors = 'DNS_ERROR_SERVER'
 
     foreach($line in $etplog) {
         if($line -match $errors){
-            Write-Output $line
+            Write-Output $line | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
         }
 
         if($line -match $regex){
@@ -36,7 +35,8 @@ if($exists)
                 $d = $array[0]
                 $t = $array[1]
                 $server = $newserver
-                Write-Output "$d $t | Akamai Server Change Detected: $server" 
+                Write-Output "$d $t | Akamai Server Change Detected: $server" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+
             }
         }
     }
