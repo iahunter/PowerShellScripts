@@ -1,6 +1,6 @@
 $timestamp = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 
-# Collect these files from user Machine if they exist
+# Collect these files from user Machine Manually
 $file = "c:\windows\logs\ETP_client.log"
 $exists = Test-Path -Path $file -PathType Leaf
 if($exists)
@@ -11,6 +11,35 @@ if($exists)
 
     $etplog = Get-Content -Path $file
     Write-Output $etplog | Out-File -FilePath .\ProblemLog-$timestamp.txt -Append
+
+    Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    Write-Output "     Collecting ETP Log Summary    " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    
+    # Attempt to parse the Log file and look for server changes and DNS error messages
+    $regex = 'attempting to send data to'
+    $errors = 'DNS_ERROR_SERVER'
+
+    foreach($line in $etplog) {
+        if($line -match $errors){
+            Write-Output $line
+        }
+
+        if($line -match $regex){
+            # Work here
+            $array = $line.Split(" ")
+            #Write-Output $line | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+            $newserver = $array | Select-Object -Last 1
+            #Write-Output $server
+            if($newserver -ne $server)
+            {
+                $d = $array[0]
+                $t = $array[1]
+                $server = $newserver
+                Write-Output "$d $t | Akamai Server Change Detected: $server" 
+            }
+        }
+    }
 }
 
 # Collect these files from user Machine if they exist
