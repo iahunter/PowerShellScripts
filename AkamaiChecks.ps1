@@ -1,5 +1,31 @@
 $timestamp = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 
+# Collect these files from user Machine if they exist
+$file = "c:\windows\logs\ETP_client.log"
+$exists = Test-Path -Path $file -PathType Leaf
+if($exists)
+{
+    Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    Write-Output "     Collecting ETP Log            " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+
+    $etplog = Get-Content -Path $file
+    Write-Output $etplog | Out-File -FilePath .\ProblemLog-$timestamp.txt -Append
+}
+
+# Collect these files from user Machine if they exist
+$file = "c:\windows\logs\EtpClientDiagnostics"
+$exists = Test-Path -Path $file -PathType Leaf
+if($exists)
+{
+    Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    Write-Output "  Collecting ETP Diagnostic Log    " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+
+    $etplog = Get-Content -Path $file
+    Write-Output $etplog | Out-File -FilePath .\ProblemLog-$timestamp.txt -Append
+}
+
 Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 Write-Output "  Starting Network Diagnostic Log  " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
