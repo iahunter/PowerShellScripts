@@ -3,6 +3,7 @@ $timestamp = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 # Collect these files from user Machine Manually
 $file = "c:\windows\logs\ETP_client.log"
 $exists = Test-Path -Path $file -PathType Leaf
+$servers = @()
 if($exists)
 {
     Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
@@ -18,7 +19,7 @@ if($exists)
 
     $regex = 'attempting to send data to'
     $errors = 'DNS_ERROR'
-
+    $akamaiServers = @()
     foreach($line in $etplog) {
         if($line -match $errors){
             Write-Output $line | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
@@ -35,14 +36,27 @@ if($exists)
                 $d = $array[0]
                 $t = $array[1]
                 $server = $newserver
+
+                if(-Not ($akamaiServers -contains $server)){
+                    $akamaiServers += $server
+                }
+                
                 Write-Output "$d $t | Akamai Server Change Detected: $server" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
             }
         }
     }
+
+    
+    foreach($server in $akamaiServers){
+        $array = $server.Split("%")
+            $servers += $array[0]
+    }
+    Write-Output $servers
 }
 
-# Collect these files from user Machine if they exist
+
+# Collect these files from user Machine Manually
 $file = "c:\windows\logs\EtpClientDiagnostics"
 $exists = Test-Path -Path $file -PathType Leaf
 if($exists)
@@ -54,6 +68,8 @@ if($exists)
     $etplog = Get-Content -Path $file
     Write-Output $etplog | Out-File -FilePath .\ProblemLog-$timestamp.txt -Append
 }
+
+
 
 Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 Write-Output "  Starting Network Diagnostic Log  " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
@@ -72,6 +88,11 @@ $nslookups = @(
 $pings = @("google.com",
             "4.2.2.2",
             "8.8.8.8")
+
+if($servers.count -gt 0){
+    $pings += $servers
+}
+
 
 $systemtime = systeminfo | findstr /C:“Time Zone”
 
@@ -111,7 +132,7 @@ while(1){
 
     }
 
-    # Domains Requested by Akamai
+
     $akamai = @("identity.answerx-liveness.net",
         "whoami.ipv4.akahelp.com",
         "www.espn.com")
