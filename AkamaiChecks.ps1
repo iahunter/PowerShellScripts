@@ -77,6 +77,15 @@ Write-Output "###################################" | Tee-Object -FilePath .\Prob
 
 Write-Output $timestamp | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
+# Check DNS Queries to these.
+$nslookups = @("kiewit.service-now.com",
+                "telecom.kiewitplaza.com",
+                "sip.pstnhub.microsoft.com.com",
+                "google.com",
+                "facebook.com",
+                "apple.com")
+
+# Check DNS Queries to these.
 $nslookups = @(
                 "sip.pstnhub.microsoft.com.com",
                 "google.com",
@@ -84,11 +93,12 @@ $nslookups = @(
                 "apple.com"
               )
 
-
+# Check Connectivity to these.
 $pings = @("google.com",
             "4.2.2.2",
             "8.8.8.8")
 
+# Add the Akamai Servers our Client is using to the Connectivity Checks
 if($servers.count -gt 0){
     $pings += $servers
 }
