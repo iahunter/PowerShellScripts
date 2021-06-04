@@ -55,7 +55,6 @@ if($exists)
     Write-Output $servers
 }
 
-
 # Collect these files from user Machine Manually
 $file = "c:\windows\logs\EtpClientDiagnostics"
 $exists = Test-Path -Path $file -PathType Leaf
@@ -68,8 +67,6 @@ if($exists)
     $etplog = Get-Content -Path $file
     Write-Output $etplog | Out-File -FilePath .\ProblemLog-$timestamp.txt -Append
 }
-
-
 
 Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 Write-Output "  Starting Network Diagnostic Log  " | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
@@ -95,14 +92,12 @@ if($servers.count -gt 0){
     $pings += $servers
 }
 
-
 $systemtime = systeminfo | findstr /C:“Time Zone”
 
 Write-Output $systemtime | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
 
 while(1){
-
     $date = Get-Date 
 
     # Record Date and Time
@@ -113,7 +108,6 @@ while(1){
 
     # Wifi Diagnostics
     netsh wlan show interface | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
-
 
     # DNS Checks
     ForEach ($nslookup in $nslookups) {
@@ -133,7 +127,6 @@ while(1){
         $result | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
     }
-
 
     $akamai = @("identity.answerx-liveness.net",
         "whoami.ipv4.akahelp.com",
