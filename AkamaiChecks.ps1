@@ -1,6 +1,6 @@
 $timestamp = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 
-# Collect these files from user Machine Manually
+# Collect these files from user Machine
 $file = "c:\windows\logs\ETP_client.log"
 $exists = Test-Path -Path $file -PathType Leaf
 $servers = @()
