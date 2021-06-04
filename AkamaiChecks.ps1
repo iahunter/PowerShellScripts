@@ -78,14 +78,6 @@ Write-Output "###################################" | Tee-Object -FilePath .\Prob
 Write-Output $timestamp | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
 # Check DNS Queries to these.
-$nslookups = @("kiewit.service-now.com",
-                "telecom.kiewitplaza.com",
-                "sip.pstnhub.microsoft.com.com",
-                "google.com",
-                "facebook.com",
-                "apple.com")
-
-# Check DNS Queries to these.
 $nslookups = @(
                 "sip.pstnhub.microsoft.com.com",
                 "google.com",
