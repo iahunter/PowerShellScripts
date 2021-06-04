@@ -17,7 +17,7 @@ if($exists)
     Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
     $regex = 'attempting to send data to'
-    $errors = 'DNS_ERROR_SERVER'
+    $errors = 'DNS_ERROR'
 
     foreach($line in $etplog) {
         if($line -match $errors){
