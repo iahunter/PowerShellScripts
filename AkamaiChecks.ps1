@@ -76,7 +76,7 @@ Write-Output $timestamp | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Appe
 
 # Check DNS Queries to these.
 $nslookups = @(
-                "sip.pstnhub.microsoft.com.com",
+                "sip.pstnhub.microsoft.com",
                 "google.com",
                 "facebook.com",
                 "apple.com"
