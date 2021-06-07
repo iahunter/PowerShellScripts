@@ -1,5 +1,5 @@
 # Script to run on User machine during intermitten issues. Will Do Network Diagnostic commands and output them into a file Named ProblemLog.txt in the directory where you run the script
-# Run in Powershell CLI by executing .\NetworkDiag1.ps1
+# Run in Powershell CLI by executing .\NetworkDiag1.ps1 or run in Powershell ISE by typing powershell_ise.exe
 
 $timestamp = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 
