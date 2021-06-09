@@ -60,10 +60,13 @@ while(1){
         $result = ping $ping
         $result |Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
-        Write-Output "tracert $ping"
-        $result = tracert $ping
-        $result |Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
-
+        # If Ping Times out then do a Traceroute
+        $regex = "Request timed out."
+        if($result -match $regex){
+            Write-Output "tracert $ping"
+            $result = tracert $ping
+            $result |Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+        }
     }
 
     Start-Sleep -s 5
