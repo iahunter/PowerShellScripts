@@ -1,3 +1,5 @@
+
+
 #Install-Module -Name MicrosoftTeams -RequiredVersion 2.3.1
 Import-Module MicrosoftTeams
 $credential = Get-Credential
@@ -34,3 +36,5 @@ ForEach ($user in $users.Keys) {
 
 # Remove number from user
 #Set-CsUser -Identity "John.Doe" -OnPremLineURI $null
+
+#Disconnect-MicrosoftTeams
