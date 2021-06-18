@@ -1,3 +1,6 @@
+# To run on a remote machine. 
+# Enter-PSSession -ComputerName <name> -Credential <creds>
+
 $timestamp = Get-Date -Format o | ForEach-Object { $_ -replace ":", "." }
 
 Write-Output "###################################" | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
