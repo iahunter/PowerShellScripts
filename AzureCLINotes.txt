@@ -1,0 +1,10 @@
+sudo apt install azure-cli
+
+#Login to Azure - Prompts you to go to webpage to login
+az login
+
+# Search for Group
+az ad group list --display-name "GROUPNAME" --query "[].{Name:displayName,objectId:objectId}" --output table
+
+# Get Members of Group by UPN
+az ad group member list --group "c4bc85bc-3916-1234-4567-cccd4ea98759" --query "[].{userPrincipalName:userPrincipalName}" --output table
