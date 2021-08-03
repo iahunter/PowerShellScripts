@@ -37,4 +37,7 @@ ForEach ($user in $users.Keys) {
 # Remove number from user
 #Set-CsUser -Identity "John.Doe" -OnPremLineURI $null
 
+#Get-CsOnlineUser -Filter {EnterpriseVoiceEnabled -eq $true} # M$ broke this boolean... :(
+#Get-CsOnlineUser -Filter {EnterpriseVoiceEnabled -eq "True"}
+
 #Disconnect-MicrosoftTeams
