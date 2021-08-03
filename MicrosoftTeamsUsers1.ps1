@@ -38,6 +38,6 @@ ForEach ($user in $users.Keys) {
 #Set-CsUser -Identity "John.Doe" -OnPremLineURI $null
 
 #Get-CsOnlineUser -Filter {EnterpriseVoiceEnabled -eq $true} # M$ broke this boolean... :(
-#Get-CsOnlineUser -Filter {EnterpriseVoiceEnabled -eq "True"}
+#Get-CsOnlineUser -Filter {EnterpriseVoiceEnabled -eq "True"} | Select alias,userprincipalname,samaccountname,interpret*,*voice*,*lineuri*,*dial*,*hosting*,*sip*,displayname
 
 #Disconnect-MicrosoftTeams
