@@ -1,0 +1,7 @@
+# To run Powershell on remote machine 
+
+$computername = "CHANGEME!!!"
+$admin = "CHANGEME!!!"
+
+
+Enter-PSSession -ComputerName $computername -Credential $admin
