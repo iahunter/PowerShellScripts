@@ -1,9 +1,10 @@
+#  *****  Must launch Powershell ISE as admin of computer  *****
 
-
-#Install-Module -Name MicrosoftTeams -RequiredVersion 2.3.1
+Install-Module -Name MicrosoftTeams -Force -AllowClobber
+Update-Module MicrosoftTeams
 Import-Module MicrosoftTeams
-$credential = Get-Credential
-Connect-MicrosoftTeams -Credential $credential
+Connect-MicrosoftTeams 
+
 
 # Add Users and number to array. 
 $users = @{
