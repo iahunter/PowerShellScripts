@@ -9,5 +9,5 @@ az ad group list --display-name "GROUPNAME" --query "[].{Name:displayName,object
 # Get Members of Group by UPN
 az ad group member list --group "c4bc85bc-3916-1234-4567-cccd4ea98759" --query "[].{userPrincipalName:userPrincipalName}" --output table
 
-# Get Group Member UPNs. 
-az ad group member list --group "GROUPNAME" --query "[].[userPrincipalName]" -o table
+# Get Group Members and output to table. 
+az ad group member list --group "GROUPNAME" --query "[].[userPrincipalName, givenName, surname]" -o table
