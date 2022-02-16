@@ -35,6 +35,9 @@ while(1){
 
     # Wifi Diagnostics
     netsh wlan show interface | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
+    
+    # Get TCP Connections
+    Get-NetTCPConnection | Tee-Object -FilePath .\ProblemLog-$timestamp.txt -Append
 
     # DNS Checks
     ForEach ($nslookup in $nslookups) {
