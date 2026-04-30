@@ -1,0 +1,54 @@
+# ===== CONFIG =====
+$Target = "8.8.8.8"
+$LogFile = "$env:USERPROFILE\wifi_latency_log.txt"
+$SpikeThreshold = 100   # ms
+$CheckDurationMinutes = 70
+
+Write-Host "Starting WiFi latency monitor..."
+"==== START $(Get-Date) ====" | Out-File $LogFile -Append
+
+$EndTime = (Get-Date).AddMinutes($CheckDurationMinutes)
+
+while ((Get-Date) -lt $EndTime) {
+    $time = Get-Date
+
+    # Ping test
+    $ping = Test-Connection -ComputerName $Target -Count 1 -ErrorAction SilentlyContinue
+    if ($ping) {
+        $latency = $ping.ResponseTime
+    } else {
+        $latency = "FAIL"
+    }
+
+    # Log normal ping
+    "$time | Ping: $latency ms" | Out-File $LogFile -Append
+
+    Write-Host "$time | $latency ms"
+
+    # Detect spike
+    if ($latency -ne "FAIL" -and $latency -gt $SpikeThreshold) {
+        "---- SPIKE DETECTED ----" | Out-File $LogFile -Append
+
+        # Top processes by CPU
+        "Top Processes:" | Out-File $LogFile -Append
+        Get-Process | Sort-Object CPU -Descending | Select-Object -First 10 |
+            Format-Table Name, CPU, Id | Out-String |
+            Out-File $LogFile -Append
+
+        # Network usage snapshot
+        "Network Connections:" | Out-File $LogFile -Append
+        Get-NetTCPConnection | Select-Object State, LocalAddress, RemoteAddress, OwningProcess |
+            Out-String | Out-File $LogFile -Append
+
+        # WiFi adapter stats
+        "WiFi Stats:" | Out-File $LogFile -Append
+        netsh wlan show interfaces | Out-String | Out-File $LogFile -Append
+
+        "-------------------------" | Out-File $LogFile -Append
+    }
+    #Write-Host (Get-Date) 
+    Start-Sleep -Seconds 1
+}
+
+"==== END $(Get-Date) ====" | Out-File $LogFile -Append
+Write-Host "Done. Log saved to $LogFile"
