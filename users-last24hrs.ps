@@ -1,0 +1,21 @@
+$logonEvents = Get-WinEvent -FilterHashtable @{
+    LogName   = 'Security'
+    ID        = 4624
+    StartTime = (Get-Date).AddHours(-24)
+} -ErrorAction SilentlyContinue
+
+foreach ($event in $logonEvents) {
+    $xml = [xml]$event.ToXml()
+    $user = $xml.Event.EventData.Data | Where-Object { $_.Name -eq 'TargetUserName' }
+    $logonType = $xml.Event.EventData.Data | Where-Object { $_.Name -eq 'LogonType' }
+    
+    # Filter for standard logins: 2 (Local), 10 (Remote Desktop), 3 (Network)
+    if ($logonType.'#text' -in '2','10','3') {
+        [PSCustomObject]@{
+            User      = $user.'#text'
+            Time      = $event.TimeCreated
+            LogonType = $logonType.'#text'
+            Machine   = $event.MachineName
+        }
+    }
+} | Sort-Object Time -Descending | Format-Table
